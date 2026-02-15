@@ -183,3 +183,6 @@ nul
 # Untitled files
 **/Untitled
 **/Untitled.*
+
+# Temporary directories
+temp/
