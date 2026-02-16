@@ -1,3 +1,4 @@
+#Requires -Version 7.0
 <#
 概要:
   ソース内の //TODO(TAG): message 形式コメントを抽出し、
