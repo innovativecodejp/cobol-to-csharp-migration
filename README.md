@@ -169,6 +169,7 @@ cobol-to-csharp-migration/
 - Working C# runtime for COBOL constructs
 - Unit tests with real COBOL sample validation
 - PowerShell tools for automated verification
+- For script execution, `pwsh` (PowerShell 7+) is recommended.
 
 ### 📊 **Coverage Visibility**
 - Implementation coverage matrix
