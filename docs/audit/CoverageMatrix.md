@@ -1,8 +1,8 @@
 # Coverage Matrix
 COBOL to C# Migration Framework
 
-Last Updated: 2026-01-30
-Version: MVP02
+Last Updated: 2026-02-17
+Version: MVP03
 
 ---
 
@@ -38,7 +38,7 @@ This matrix tracks the implementation status of COBOL construct transformations 
 
 | COBOL Construct | Status | Rule ID | Test Coverage | Notes |
 |-----------------|--------|---------|---------------|-------|
-| UNSTRING | ✅ | R-002-01 | Basic | Single delimiter, simple INTO clause |
+| UNSTRING | ✅ | R-002-01 | Extended (MVP03) | Verified: DELIMITED BY ALL / COUNT / POINTER / TALLYING |
 | INSPECT | ✅ | R-002-02 | Basic | CONVERTING lowercase to uppercase |
 | STRING | 📋 | R-002-03 | - | Planned for MVP03 |
 | EXAMINE | ❌ | - | - | Legacy construct, not prioritized |
@@ -112,7 +112,7 @@ This matrix tracks the implementation status of COBOL construct transformations 
 
 ## Coverage Statistics
 
-### Current Implementation (MVP02)
+### Current Implementation (MVP03)
 
 - **Total Constructs Identified**: 25
 - **Fully Implemented**: 4 (16%)
@@ -171,7 +171,7 @@ Each construct must meet:
 
 ### Current Scope Limitations
 
-1. **UNSTRING**: Only single delimiter patterns supported
+1. **UNSTRING**: MVP03 covers `DELIMITED BY ALL SPACE` + `COUNT` / `POINTER` / `TALLYING`; complex delimiter sets remain pending
 2. **INSPECT**: Limited to case conversion operations
 3. **File Operations**: Not yet implemented
 4. **Complex Data Structures**: Pending implementation
@@ -202,5 +202,5 @@ Each construct must meet:
 ---
 
 Status: Active Tracking
-Completeness: MVP02 Baseline
-Next Update: After MVP02 stabilization
+Completeness: MVP03 Baseline
+Next Update: After MVP03 stabilization

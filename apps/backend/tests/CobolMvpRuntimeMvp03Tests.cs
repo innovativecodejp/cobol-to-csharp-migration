@@ -10,6 +10,10 @@ public class CobolMvpRuntimeMvp03Tests
 {
     [Theory]
     [InlineData("AAA   BBB  CCCC", "A=AAA|LA=3|B=BBB|LB=3|C=CCCC|LC=4|PTR=16|DC=3")]
+    [InlineData("AAA BBB  CCCC", "A=AAA|LA=3|B=BBB|LB=3|C=CCCC|LC=4|PTR=14|DC=3")]
+    [InlineData("AAA   BBB  CCCC   ", "A=AAA|LA=3|B=BBB|LB=3|C=CCCC|LC=4|PTR=19|DC=3")]
+    [InlineData("   AAA   BBB  CCCC", "A=|LA=0|B=AAA|LB=3|C=BBB|LC=3|PTR=15|DC=3")]
+    [InlineData("AAABBBCCCC", "A=AAABBBCCCC|LA=10|B=|LB=0|C=|LC=0|PTR=11|DC=3")]
     public void TransformRecord_KnownInput_ReturnsExpected(string input, string expected)
     {
         string result = Mvp03Program.TransformRecord(input);

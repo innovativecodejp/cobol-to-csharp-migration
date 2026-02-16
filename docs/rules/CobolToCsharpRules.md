@@ -1,8 +1,8 @@
 # Rule Definitions
 COBOL to C# Migration Framework
 
-Last Updated: 2026-01-30
-Version: MVP02
+Last Updated: 2026-02-17
+Version: MVP03
 
 ---
 
@@ -55,6 +55,30 @@ field2 = parts.Length > 1 ? parts[1] : string.Empty;
 **Known Limitations:** 
 - Multiple delimiter patterns not fully supported
 - Complex INTO clause variations pending
+
+**MVP03 Verified Derived Features:**
+- `DELIMITED BY ALL SPACE`
+- `COUNT IN` per receiving field
+- `WITH POINTER` (1-based pointer behavior)
+- `TALLYING IN` (receiving-field count behavior)
+
+**MVP03 Verification Sample:**
+```cobol
+UNSTRING WS-IN
+    DELIMITED BY ALL SPACE
+    INTO WS-A COUNT IN WS-LEN-A
+         WS-B COUNT IN WS-LEN-B
+         WS-C COUNT IN WS-LEN-C
+    WITH POINTER WS-PTR
+    TALLYING IN WS-DELIM-COUNT
+END-UNSTRING
+```
+
+**MVP03 Test Scope:**
+- Consecutive space variations (`ALL SPACE` behavior)
+- Trailing spaces
+- Leading spaces
+- No-delimiter input (fixed `PTR` / `DC` behavior)
 
 #### R-002-02: INSPECT Statement
 **COBOL Pattern:**
