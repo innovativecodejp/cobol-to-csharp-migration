@@ -1,0 +1,1 @@
+MARK=Y|SEQ=ABC
