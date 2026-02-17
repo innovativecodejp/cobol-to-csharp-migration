@@ -2,7 +2,7 @@
 COBOL to C# Migration Framework
 
 Last Updated: 2026-02-17
-Version: MVP03
+Version: MVP06
 
 ---
 
@@ -92,11 +92,74 @@ fieldName = fieldName.ToUpperInvariant(); // for lowercase to uppercase conversi
 // Additional character conversion logic as needed
 ```
 
-**Implementation Status:** ✅ Implemented
-**Test Coverage:** Basic case conversion
+**Implementation Status:** ✅ Implemented (MVP04/MVP05 scope)
+**Test Coverage:** Extended scenarios covered
+
+**MVP04 Verified Derived Features:**
+- `TALLYING ... FOR ALL "A"`
+- `REPLACING LEADING "0" BY "X"`
+- `REPLACING FIRST "AB" BY "YZ"`
+
+**MVP05 Verified Derived Features:**
+- `CONVERTING "ABCDEFGHIJKLMNOPQRSTUVWXYZ" TO "abcdefghijklmnopqrstuvwxyz"`
+
+**MVP04/MVP05 Verification Samples:**
+```cobol
+INSPECT WS-TEXT TALLYING WS-COUNT FOR ALL "A"
+INSPECT WS-TEXT REPLACING LEADING "0" BY "X"
+INSPECT WS-TEXT REPLACING FIRST "AB" BY "YZ"
+INSPECT WS-TEXT CONVERTING "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                     TO "abcdefghijklmnopqrstuvwxyz"
+```
+
 **Known Limitations:**
-- Only supports lowercase to uppercase conversion currently
-- Complex character replacement patterns pending
+- Character-class and locale-specific conversions are not covered yet
+- Multi-byte and national character handling is out of current scope
+
+---
+
+### R-005 Series: Control Flow Operations
+
+#### R-005-01: EVALUATE Statement
+**COBOL Pattern:**
+```cobol
+EVALUATE WS-MODE
+    WHEN 1
+        EVALUATE WS-VAL
+            WHEN 0 THRU 9
+            WHEN 10 THRU 19
+            WHEN OTHER
+        END-EVALUATE
+    WHEN OTHER
+        EVALUATE TRUE ALSO TRUE
+            WHEN (cond-1) ALSO (cond-2)
+            WHEN OTHER
+        END-EVALUATE
+END-EVALUATE
+```
+
+**C# Transformation:**
+```csharp
+if (wsMode == 1)
+{
+    if (wsVal >= 0 && wsVal <= 9) { wsRange = "0-9"; }
+    else if (wsVal >= 10 && wsVal <= 19) { wsRange = "10-19"; }
+    else { wsRange = "OTHER"; }
+}
+else
+{
+    if ((wsMode == 2) && (wsVal >= 200)) { wsCase = "VIP"; }
+    else if ((wsMode == 2) && (wsVal < 200)) { wsCase = "NORMAL"; }
+    else { wsCase = "N/A"; }
+}
+```
+
+**Implementation Status:** ✅ Implemented (MVP06 minimal scope)
+**Test Coverage:** THRU + ALSO branches covered
+**MVP06 Verified Derived Features:**
+- Multiple `WHEN` branches
+- `THRU` range matching (`0 THRU 9`, `10 THRU 19`)
+- `ALSO` condition pairs (`EVALUATE TRUE ALSO TRUE`)
 
 ---
 
@@ -184,4 +247,4 @@ Planned rule categories for future releases:
 
 Status: Active Development
 Stability: MVP Level
-Next Review: After MVP02 stabilization
+Next Review: After MVP06 stabilization
