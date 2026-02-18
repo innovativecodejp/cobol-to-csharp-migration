@@ -2,7 +2,7 @@
 COBOL to C# Migration Framework
 
 Last Updated: 2026-02-18
-Version: MVP11
+Version: MVP14
 
 ---
 
@@ -266,6 +266,134 @@ Console.WriteLine(fieldName);
 
 ---
 
+### R-004 Series: File I/O Operations
+
+#### R-004-01: Sequential READ with `AT END`
+**COBOL Pattern:**
+```cobol
+OPEN INPUT IN-FILE
+PERFORM UNTIL EOF
+    READ IN-FILE
+        AT END
+            SET EOF TO TRUE
+        NOT AT END
+            ADD 1 TO WS-LINE-NO
+            DISPLAY "LINE=" WS-LINE-NO "|TEXT=" IN-REC
+    END-READ
+END-PERFORM
+CLOSE IN-FILE
+DISPLAY "COUNT=" WS-LINE-NO
+```
+
+**C# Transformation:**
+```csharp
+int lineNo = 0;
+bool eof = false;
+using (var reader = new StreamReader(inputPath, Encoding.ASCII))
+{
+    while (!eof)
+    {
+        string record = reader.ReadLine();
+        if (record == null) { eof = true; }
+        else
+        {
+            lineNo += 1;
+            writer.WriteLine("LINE=" + lineNo.ToString("D4") + "|TEXT=" + record);
+        }
+    }
+}
+writer.WriteLine("COUNT=" + lineNo.ToString("D4"));
+```
+
+**Implementation Status:** ✅ Implemented (MVP12 minimal scope)
+**Test Coverage:** Multi-line input + EOF termination path covered
+**MVP12 Verified Features:**
+- `SELECT/FD` with line-sequential input
+- `READ ... AT END` EOF control
+- Runtime path resolution (`MVP12_INPUT` or `mvp12-input.txt`)
+
+---
+
+#### R-004-02: Sequential WRITE (output file creation)
+**COBOL Pattern:**
+```cobol
+OPEN OUTPUT OUT-FILE
+PERFORM 3 TIMES
+    ADD 1 TO WS-I
+    STRING "REC" DELIMITED BY SIZE
+           "="   DELIMITED BY SIZE
+           WS-I  DELIMITED BY SIZE
+           INTO OUT-REC
+    END-STRING
+    WRITE OUT-REC
+END-PERFORM
+CLOSE OUT-FILE
+DISPLAY "WROTE=0003"
+```
+
+**C# Transformation:**
+```csharp
+using (var fileWriter = new StreamWriter(outputPath, false, Encoding.ASCII))
+{
+    for (int i = 1; i <= 3; i++)
+    {
+        fileWriter.WriteLine("REC=" + i.ToString("D4"));
+    }
+}
+writer.WriteLine("WROTE=0003");
+```
+
+**Implementation Status:** ✅ Implemented (MVP13 minimal scope)
+**Test Coverage:** Generated output-file content exact match covered
+**MVP13 Verified Features:**
+- `SELECT/FD` with line-sequential output
+- Basic `WRITE` loop (`PERFORM n TIMES`)
+- Runtime path resolution (`MVP13_OUTPUT` or `mvp13-output.txt`)
+
+---
+
+#### R-004-03: Indexed START positioning + `READ NEXT`
+**COBOL Pattern:**
+```cobol
+START IDX-FILE KEY >= WS-STARTKEY
+    INVALID KEY
+        SET EOF TO TRUE
+END-START
+
+PERFORM UNTIL EOF
+    READ IDX-FILE NEXT
+        AT END
+            SET EOF TO TRUE
+        NOT AT END
+            DISPLAY "KEY=" IDX-KEY "|TEXT=" IDX-TEXT
+    END-READ
+END-PERFORM
+DISPLAY "DONE"
+```
+
+**C# Transformation:**
+```csharp
+int startIndex = records.FindIndex(r => r.Key >= startKey);
+if (startIndex >= 0)
+{
+    for (int i = startIndex; i < records.Count; i++)
+    {
+        writer.WriteLine("KEY=" + records[i].Key.ToString("D4") + "|TEXT=" + records[i].Text);
+    }
+}
+writer.WriteLine("DONE");
+```
+
+**Implementation Status:** ✅ Implemented (MVP14 minimal scope)
+**Test Coverage:** Case-based start-key scenarios covered
+**MVP14 Verified Features:**
+- `ORGANIZATION IS INDEXED` + `RECORD KEY`
+- `START ... KEY >= ...` positioning semantics
+- `READ ... NEXT` sequential fetch after positioning
+- Runtime controls (`MVP14_INDEX`, `MVP14_CASE`)
+
+---
+
 ## Rule Implementation Guidelines
 
 ### Transformation Principles
@@ -322,7 +450,6 @@ All rules undergo:
 
 Planned rule categories for future releases:
 
-- **R-004 Series**: File Operations (READ, WRITE, OPEN, CLOSE)
 - **R-005 Series**: Control Flow extensions (IF, GO TO, nested control variants)
 - **R-006 Series**: Arithmetic Operations
 - **R-007 Series**: Data Definition (PIC clauses, OCCURS)
@@ -332,4 +459,4 @@ Planned rule categories for future releases:
 
 Status: Active Development
 Stability: MVP Level
-Next Review: After MVP11 stabilization
+Next Review: After MVP14 stabilization
