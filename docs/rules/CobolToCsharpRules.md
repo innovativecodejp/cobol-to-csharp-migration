@@ -460,3 +460,126 @@ Planned rule categories for future releases:
 Status: Active Development
 Stability: MVP Level
 Next Review: After MVP14 stabilization
+
+# 2026-02-20 
+```mermaid
+
+flowchart TB
+  T["【COBOL→C# 変換MVPロードマップ】A〜E 完了 ✅"]:::title
+
+  subgraph G[" "]
+    direction LR
+
+    subgraph L[" "]
+      direction TB
+      A["✅ A：STRING/UNSTRING&nbsp;&nbsp;｜頻出・派生多・TODO観測"]:::done
+      B["✅ B：INSPECT&nbsp;&nbsp;｜TALLYING/REPLACING/CONVERTING"]:::done
+      C["✅ C：EVALUATE&nbsp;&nbsp;｜制御構造・IR/CFG直結"]:::done
+    end
+
+    subgraph R[" "]
+      direction TB
+      D["✅ D：PERFORM&nbsp;&nbsp;｜段落/ループ・制御フロー解析"]:::done
+      E["✅ E：ファイルI/O&nbsp;&nbsp;｜環境/状態依存・ハーネス別物"]:::done
+    end
+  end
+
+  P["🧩 実行ループ：ChatGPT→Codex指示 → Cursor(agent)で 実装→テスト→ログ"]:::loop
+  N["🚀 Next：COBOL構造解析（AST/IR/CFG：可視化・差分・仕様生成）"]:::next
+
+  T --> G --> P --> N
+
+  classDef title fill:#0b3d91,stroke:#0b3d91,color:#ffffff,stroke-width:1px;
+  classDef done fill:#e6ffed,stroke:#2da44e,color:#111827,stroke-width:2px;
+  classDef loop fill:#fff7ed,stroke:#f59e0b,color:#111827,stroke-width:2px;
+  classDef next fill:#eef2ff,stroke:#6366f1,color:#111827,stroke-width:2px;
+
+  style G fill:transparent,stroke:transparent
+  style L fill:transparent,stroke:transparent
+  style R fill:transparent,stroke:transparent
+
+```
+```mermaid
+flowchart TB
+  T["【COBOL→C# 変換MVPロードマップ】A〜E 完了 ✅"]:::title
+
+  subgraph G[" "]
+    direction TB
+
+    subgraph Top[" "]
+      direction LR
+      D["✅ D：PERFORM｜段落/ループ"]:::done
+      E["✅ E：ファイルI/O｜環境/状態"]:::done
+    end
+
+    subgraph Mid[" "]
+      direction LR
+      A["✅ A：STRING/UNSTRING"]:::done
+      B["✅ B：INSPECT"]:::done
+      C["✅ C：EVALUATE"]:::done
+    end
+  end
+
+  P["🧩 実行ループ：ChatGPT→Codex指示 → Cursor(agent)で 実装→テスト→ログ"]:::loop
+  N["🚀 Next：COBOL構造解析（AST/IR/CFG）"]:::next
+
+  %% 主線
+  T --> G
+  G --> P --> N
+
+  %% 収束矢印（不足していた部分）
+  A --> P
+  B --> P
+  C --> P
+  D --> P
+  E --> P
+
+  classDef title fill:#0b3d91,stroke:#0b3d91,color:#ffffff,stroke-width:1px;
+  classDef done fill:#e6ffed,stroke:#2da44e,color:#111827,stroke-width:2px;
+  classDef loop fill:#fff7ed,stroke:#f59e0b,color:#111827,stroke-width:2px;
+  classDef next fill:#eef2ff,stroke:#6366f1,color:#111827,stroke-width:2px;
+
+  style G fill:transparent,stroke:transparent
+  style Top fill:transparent,stroke:transparent
+  style Mid fill:transparent,stroke:transparent
+
+```
+```mermaid 
+flowchart TB
+  subgraph TOP[" "]
+    direction TB
+    T["【COBOL→C# 変換MVPロードマップ】"]:::title
+
+    subgraph ROW[" "]
+      direction LR
+      A["✅ A：STRING/UNSTRING"]:::done
+      B["✅ B：INSPECT"]:::done
+      C["✅ C：EVALUATE"]:::done
+      D["✅ D：PERFORM｜段落/ループ"]:::done
+      E["✅ E：ファイルI/O｜環境/状態"]:::done
+    end
+  end
+
+  P["🧩 実行ループ：ChatGPT→Codex指示 → Cursor(agent)で 実装→テスト→ログ"]:::loop
+  N["🚀 Next：COBOL構造解析（AST/IR/CFG）"]:::next
+
+  %% 主線
+  T --> ROW
+  ROW --> P --> N
+
+  %% 収束（各カテゴリ→実行ループ）
+  A --> P
+  B --> P
+  C --> P
+  D --> P
+  E --> P
+
+  classDef title fill:#0b3d91,stroke:#0b3d91,color:#ffffff,stroke-width:1px;
+  classDef done fill:#e6ffed,stroke:#2da44e,color:#111827,stroke-width:2px;
+  classDef loop fill:#fff7ed,stroke:#f59e0b,color:#111827,stroke-width:2px;
+  classDef next fill:#eef2ff,stroke:#6366f1,color:#111827,stroke-width:2px;
+
+  style TOP fill:transparent,stroke:transparent
+  style ROW fill:transparent,stroke:transparent
+
+```
