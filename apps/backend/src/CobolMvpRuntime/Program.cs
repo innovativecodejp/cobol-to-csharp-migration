@@ -56,7 +56,10 @@ namespace CobolMvpRuntime
             int qty = int.Parse(qtyStr);
             int unitPrice = int.Parse(unitPriceStr);
             int total = qty * unitPrice;
+            MigrationTrace.LogAssign("TOTAL", total.ToString("D7"));
+
             string bigFlag = qty >= 100 ? "Y" : "N";
+            MigrationTrace.LogIf("QTY>=100", qty >= 100);
 
             return custId + name + qtyStr + unitPriceStr + total.ToString("D7") + bigFlag + new string(' ', 19);
         }
