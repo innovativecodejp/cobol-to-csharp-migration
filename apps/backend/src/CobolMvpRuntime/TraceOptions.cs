@@ -10,6 +10,7 @@ namespace CobolMvpRuntime
 
         internal string RunId { get; set; } = string.Empty;
 
+        // When false, trace APIs are no-op and output file is not created.
         internal bool ResetOnStart { get; set; } = false;
 
         internal static string GenerateRunId()

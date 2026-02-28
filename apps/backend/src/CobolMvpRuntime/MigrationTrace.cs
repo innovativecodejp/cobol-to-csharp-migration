@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -93,12 +94,77 @@ namespace CobolMvpRuntime
             }
         }
 
+        internal static void LogRead(string file, string result, params (string Key, string Val)[] extra)
+        {
+            Log("READ", MergeFields(("FILE", file ?? string.Empty), ("RESULT", result ?? string.Empty), extra));
+        }
+
+        internal static void LogWrite(string file, params (string Key, string Val)[] extra)
+        {
+            Log("WRITE", MergeFields(("FILE", file ?? string.Empty), extra));
+        }
+
+        internal static void LogStart(string file, string key, string result, params (string Key, string Val)[] extra)
+        {
+            Log(
+                "START",
+                MergeFields(
+                    ("FILE", file ?? string.Empty),
+                    ("KEY", key ?? string.Empty),
+                    ("RESULT", result ?? string.Empty),
+                    extra
+                )
+            );
+        }
+
         internal static void Stop()
         {
             lock (SyncRoot)
             {
                 _started = false;
             }
+        }
+
+        private static (string Key, string Val)[] MergeFields(
+            (string Key, string Val) required,
+            params (string Key, string Val)[] extra)
+        {
+            var list = new List<(string Key, string Val)> { required };
+            if (extra != null && extra.Length > 0)
+            {
+                list.AddRange(extra);
+            }
+
+            return list.ToArray();
+        }
+
+        private static (string Key, string Val)[] MergeFields(
+            (string Key, string Val) required1,
+            (string Key, string Val) required2,
+            params (string Key, string Val)[] extra)
+        {
+            var list = new List<(string Key, string Val)> { required1, required2 };
+            if (extra != null && extra.Length > 0)
+            {
+                list.AddRange(extra);
+            }
+
+            return list.ToArray();
+        }
+
+        private static (string Key, string Val)[] MergeFields(
+            (string Key, string Val) required1,
+            (string Key, string Val) required2,
+            (string Key, string Val) required3,
+            params (string Key, string Val)[] extra)
+        {
+            var list = new List<(string Key, string Val)> { required1, required2, required3 };
+            if (extra != null && extra.Length > 0)
+            {
+                list.AddRange(extra);
+            }
+
+            return list.ToArray();
         }
     }
 }

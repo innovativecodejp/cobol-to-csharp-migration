@@ -32,7 +32,12 @@ namespace CobolMvpRuntime
                 return string.Empty;
             }
 
-            return value.Replace("\r", "\\r").Replace("\n", "\\n");
+            return value
+                .Replace("\\", "\\\\")
+                .Replace("\r", "\\r")
+                .Replace("\n", "\\n")
+                .Replace("|", "\\|")
+                .Replace("=", "\\=");
         }
     }
 }
