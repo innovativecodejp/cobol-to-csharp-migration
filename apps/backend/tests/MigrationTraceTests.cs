@@ -65,9 +65,9 @@ public class MigrationTraceTests
                 ResetOnStart = true
             });
 
-            MigrationTrace.LogRead("INPUT1", "OK", ("RECNO", "1"));
-            MigrationTrace.LogWrite("OUT1", ("RECNO", "1"), ("LEN", "40"));
-            MigrationTrace.LogStart("IDX1", "K=0001", "OK");
+            MigrationTrace.LogRead("INPUT1", "OK", ("STMT", "R001"), ("RECNO", "1"));
+            MigrationTrace.LogWrite("OUT1", ("STMT", "W001"), ("RECNO", "1"), ("LEN", "40"));
+            MigrationTrace.LogStart("IDX1", "K=0001", "OK", ("STMT", "S001"));
             MigrationTrace.Stop();
 
             string[] lines = File.ReadAllLines(tempFile, Encoding.UTF8);
@@ -77,11 +77,13 @@ public class MigrationTraceTests
             Assert.Contains("TYPE=READ", lines[0]);
             Assert.Contains("FILE=INPUT1", lines[0]);
             Assert.Contains("RESULT=OK", lines[0]);
+            Assert.Contains("STMT=R001", lines[0]);
             Assert.Contains("RECNO=1", lines[0]);
 
             Assert.Contains("STEP=000002", lines[1]);
             Assert.Contains("TYPE=WRITE", lines[1]);
             Assert.Contains("FILE=OUT1", lines[1]);
+            Assert.Contains("STMT=W001", lines[1]);
             Assert.Contains("RECNO=1", lines[1]);
             Assert.Contains("LEN=40", lines[1]);
 
@@ -90,6 +92,7 @@ public class MigrationTraceTests
             Assert.Contains("FILE=IDX1", lines[2]);
             Assert.Contains("KEY=K\\=0001", lines[2]);
             Assert.Contains("RESULT=OK", lines[2]);
+            Assert.Contains("STMT=S001", lines[2]);
         }
         finally
         {

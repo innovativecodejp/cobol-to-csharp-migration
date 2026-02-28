@@ -75,3 +75,18 @@ Pester未導入環境では、以下を手動検証手順とする。
 2. `-IgnoreRunId` 付きで比較し、`exit 0` になることを確認する  
 3. 1行変更して再比較し、`DiffCount` / `FirstMismatchIndex` / サンプル差分が出て `exit 1` になることを確認する  
 4. `-FailFast` 指定時に最初の差分のみ表示されることを確認する
+
+## 10. compare-trace の比較キー運用
+
+- `KeyMode=AUTO`（既定）
+  - Expected/Actual の両方で `STMT` が1件以上あれば `STMT` 優先
+  - それ以外は `STEP` を使用
+- `KeyMode=STMT`
+  - `STMT` を抽出し、キー順に安定ソートして比較する
+  - `STMT` 無し行は末尾に配置する
+- `KeyMode=STEP`
+  - 行順（実行順）比較を行う
+
+仮定:
+- COBOL側は手動採番の `STMT`（例: `R001`, `I001`, `W001`）を出力できる前提とする。
+- C#側は必要に応じて `extra` キーで `STMT` を付与する。
