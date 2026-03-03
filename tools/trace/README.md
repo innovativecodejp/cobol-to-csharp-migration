@@ -5,6 +5,8 @@
 COBOL側トレースとC#側トレースを `compare-trace.ps1` で比較し、  
 変換後挙動の同型性を確認する。
 
+本MVPでは、`STMT=L000000C000`（行+カラム）形式を比較キーとして扱う。
+
 ## 前提
 
 - PowerShell 7 (`pwsh`) が利用可能であること
@@ -81,6 +83,13 @@ pwsh -NoProfile -File ".\tools\trace\compare-trace.ps1" `
   - `STMT` キーで安定ソートして比較（実行順差異に耐性）
 - `STEP`:
   - 行順比較（実行順を厳密比較）
+
+### STMT優先比較の実証
+
+ゴールデン testdata は意図的に STEP 順がずれている。
+
+- `KeyMode=STEP` では差分検出（失敗）
+- `KeyMode=STMT` または `AUTO`（STMT採用）では一致（成功）
 
 ## CI 回帰用の最小比較データ
 

@@ -45,10 +45,10 @@
            START IDX-FILE KEY >= WS-START-KEY
                INVALID KEY
                    DISPLAY "RUN=" WS-RUN
-                       "|STMT=S001|TYPE=START|FILE=IDX1|KEY=0003|RESULT=INVALID"
+                       "|STMT=L000045C012|TYPE=START|FILE=IDX1|KEY=0003|RESULT=INVALID"
                NOT INVALID KEY
                    DISPLAY "RUN=" WS-RUN
-                       "|STMT=S001|TYPE=START|FILE=IDX1|KEY=0003|RESULT=OK"
+                       "|STMT=L000045C012|TYPE=START|FILE=IDX1|KEY=0003|RESULT=OK"
            END-START.
            CLOSE IDX-FILE.
 
@@ -57,32 +57,32 @@
                    AT END
                        SET EOF TO TRUE
                        DISPLAY "RUN=" WS-RUN
-                           "|STMT=R999|TYPE=READ|FILE=IN1|RESULT=EOF"
+                           "|STMT=L000056C016|TYPE=READ|FILE=IN1|RESULT=EOF"
                    NOT AT END
                        ADD 1 TO WS-RECNO
                        DISPLAY "RUN=" WS-RUN
-                           "|STMT=R001|TYPE=READ|FILE=IN1|RESULT=OK|RECNO=" WS-RECNO
+                           "|STMT=L000056C016|TYPE=READ|FILE=IN1|RESULT=OK|RECNO=" WS-RECNO
 
                        IF IN-REC(1:1) = "A"
                            DISPLAY "RUN=" WS-RUN
-                               "|STMT=I001|TYPE=IF|COND=FIRST==A|RESULT=TRUE"
+                               "|STMT=L000066C024|TYPE=IF|COND=FIRST==A|RESULT=TRUE"
                        ELSE
                            DISPLAY "RUN=" WS-RUN
-                               "|STMT=I001|TYPE=IF|COND=FIRST==A|RESULT=FALSE"
+                               "|STMT=L000066C024|TYPE=IF|COND=FIRST==A|RESULT=FALSE"
                        END-IF
 
                        MOVE IN-REC TO OUT-REC
                        DISPLAY "RUN=" WS-RUN
-                           "|STMT=M001|TYPE=ASSIGN|VAR=OUT-REC|VAL=" OUT-REC
+                           "|STMT=L000074C024|TYPE=ASSIGN|VAR=OUT-REC|VAL=" OUT-REC
 
                        WRITE OUT-REC
                        DISPLAY "RUN=" WS-RUN
-                           "|STMT=W001|TYPE=WRITE|FILE=OUT1|RECNO=" WS-RECNO
+                           "|STMT=L000078C024|TYPE=WRITE|FILE=OUT1|RECNO=" WS-RECNO
                END-READ
            END-PERFORM.
 
            CLOSE IN-FILE.
            CLOSE OUT-FILE.
 
-           DISPLAY "RUN=" WS-RUN "|STMT=D001|TYPE=DISPLAY|TEXT=DONE".
+           DISPLAY "RUN=" WS-RUN "|STMT=L000087C012|TYPE=DISPLAY|TEXT=DONE".
            GOBACK.
