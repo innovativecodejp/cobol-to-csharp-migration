@@ -97,8 +97,8 @@ function Remove-Field {
 
 $effectiveKeyMode = $KeyMode
 if ($KeyMode -eq "AUTO") {
-  $expectedHasStmt = ($expectedLines | Where-Object { (Get-TraceKey -Line $_ -KeyName "STMT") -ne "" }).Count -gt 0
-  $actualHasStmt = ($actualLines | Where-Object { (Get-TraceKey -Line $_ -KeyName "STMT") -ne "" }).Count -gt 0
+  $expectedHasStmt = (@($expectedLines | Where-Object { (Get-TraceKey -Line $_ -KeyName "STMT") -ne "" })).Count -gt 0
+  $actualHasStmt = (@($actualLines | Where-Object { (Get-TraceKey -Line $_ -KeyName "STMT") -ne "" })).Count -gt 0
   if ($expectedHasStmt -and $actualHasStmt) {
     $effectiveKeyMode = "STMT"
   }

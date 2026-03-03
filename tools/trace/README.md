@@ -81,3 +81,17 @@ pwsh -NoProfile -File ".\tools\trace\compare-trace.ps1" `
   - `STMT` キーで安定ソートして比較（実行順差異に耐性）
 - `STEP`:
   - 行順比較（実行順を厳密比較）
+
+## CI 回帰用の最小比較データ
+
+Phase2の回帰判定を自動化するため、以下の固定ファイルを用意している。
+
+- `tools/trace/testdata/expected.trace.log`
+- `tools/trace/testdata/actual.trace.log`
+
+この2ファイルは初期状態では同一内容（PASSケース）であり、  
+`run-compare.ps1` から `compare-trace.ps1` を呼ぶことで CI 判定に利用する。
+
+仮定:
+- CIの最小目的は「比較ロジックが常時実行されること」の担保である。
+- FAILケースは必要に応じて別testdata（または一時改変）で検証する。
