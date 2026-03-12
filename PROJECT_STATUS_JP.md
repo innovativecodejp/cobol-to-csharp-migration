@@ -130,10 +130,10 @@ MVP02：構文対応拡張＋検証強化（現在）
 
 日次ログ：
 
-- log/working-memo/2026-02-13.md
-- log/working-memo/2026-02-14.md
-- log/working-memo/2026-02-15.md
-- log/working-memo/2026-02-16.md
+- log/working-log/2026-02-13.md
+- log/working-log/2026-02-14.md
+- log/working-log/2026-02-15.md
+- log/working-log/2026-02-16.md
 
 ---
 

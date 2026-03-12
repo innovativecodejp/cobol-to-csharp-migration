@@ -140,7 +140,7 @@ cobol-to-csharp-migration/
 │           └── 2026-02-11_01_Implement_TodoHandling.md
 │
 ├── log/                             # Development logs
-│   └── working-memo/                # Daily logs (Japanese)
+│   └── working-log/                 # Daily logs (Japanese)
 │       ├── 2026-02-13.md
 │       ├── 2026-02-14.md
 │       └── 2026-02-15.md
@@ -205,4 +205,4 @@ cobol-to-csharp-migration/
 For detailed status information, see:
 - [PROJECT_STATUS.md](PROJECT_STATUS.md) - English overview
 - [PROJECT_STATUS_JP.md](PROJECT_STATUS_JP.md) - Detailed Japanese status
-- [log/working-memo/](log/working-memo/) - Daily development logs
+- [log/working-log/](log/working-log/) - Daily development logs

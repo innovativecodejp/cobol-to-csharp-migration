@@ -68,7 +68,7 @@ The long-term goal is to establish:
 
 Daily development logs are maintained in:
 
-`log/working-memo/` (Japanese)
+`log/working-log/` (Japanese)
 
 ---
 
