@@ -6,6 +6,7 @@ using Xunit;
 
 namespace CobolToCsharpMigration.Tests;
 
+[Collection("MigrationTrace")]
 public class GoldenIoTraceRunnerTests
 {
     [Fact]

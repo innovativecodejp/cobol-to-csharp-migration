@@ -46,6 +46,53 @@ public class CobolMvpRuntimeMvp13Tests
         }
     }
 
+    [Theory]
+    [InlineData("input_1line.txt", "expected_1line.txt")]
+    [InlineData("input_multiline.txt", "expected_multiline.txt")]
+    public void ProcessFile_ReadWriteCopy_MatchesExpectedOutput(string inputFile, string expectedFile)
+    {
+        string backendRoot = GetBackendRoot();
+        string repoRoot = Path.GetFullPath(Path.Combine(backendRoot, "..", ".."));
+        string inputPath = Path.Combine(repoRoot, "samples", "data", "mvp13", inputFile);
+        string expectedPath = Path.Combine(repoRoot, "samples", "data", "mvp13", expectedFile);
+
+        string outPath = Path.Combine(Path.GetTempPath(), "mvp13_copy_" + Guid.NewGuid().ToString("N") + ".txt");
+        try
+        {
+            Mvp13Program.ProcessFile(inputPath, outPath);
+
+            string expected = NormalizeNewLine(File.ReadAllText(expectedPath, Encoding.ASCII));
+            string actual = NormalizeNewLine(File.ReadAllText(outPath, Encoding.ASCII));
+            Assert.Equal(expected, actual);
+        }
+        finally
+        {
+            if (File.Exists(outPath))
+            {
+                File.Delete(outPath);
+            }
+        }
+    }
+
+    [Fact]
+    public void SequentialFileWriter_WriteFrom_ThrowsNotSupportedException()
+    {
+        string tempPath = Path.Combine(Path.GetTempPath(), "mvp13_writefrom_" + Guid.NewGuid().ToString("N") + ".txt");
+        try
+        {
+            using var writer = new SequentialFileWriter(tempPath);
+            var ex = Assert.Throws<NotSupportedException>(() => writer.WriteFrom());
+            Assert.Contains("WRITE", ex.Message);
+        }
+        finally
+        {
+            if (File.Exists(tempPath))
+            {
+                File.Delete(tempPath);
+            }
+        }
+    }
+
     private static string NormalizeNewLine(string value)
     {
         return value.Replace("\r\n", "\n");

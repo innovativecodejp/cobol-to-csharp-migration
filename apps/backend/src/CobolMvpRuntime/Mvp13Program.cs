@@ -1,11 +1,11 @@
 using System;
 using System.IO;
-using System.Text;
 
 namespace CobolMvpRuntime
 {
     // MVP13 target: verify sequential file output core
-    // SELECT/FD/WRITE without READ derivatives
+    // SELECT/FD/OPEN OUTPUT/WRITE/CLOSE
+    // Conversion: outfile.WriteLine(record);
     internal static class Mvp13Program
     {
         internal static void Run(TextWriter writer)
@@ -15,7 +15,7 @@ namespace CobolMvpRuntime
                 ? Path.Combine(Environment.CurrentDirectory, "mvp13-output.txt")
                 : envPath;
 
-            using (var fileWriter = new StreamWriter(outputPath, false, Encoding.ASCII))
+            using (var fileWriter = new SequentialFileWriter(outputPath))
             {
                 for (int i = 1; i <= 3; i++)
                 {
@@ -24,6 +24,21 @@ namespace CobolMvpRuntime
             }
 
             writer.WriteLine("WROTE=0003");
+        }
+
+        /// <summary>
+        /// READ from input, WRITE to output. MVP12 + MVP13 integration.
+        /// </summary>
+        internal static void ProcessFile(string inPath, string outPath)
+        {
+            using (var reader = new SequentialFileReader(inPath))
+            using (var writer = new SequentialFileWriter(outPath))
+            {
+                while (reader.ReadNext())
+                {
+                    writer.WriteLine(reader.CurrentRecord);
+                }
+            }
         }
     }
 }
