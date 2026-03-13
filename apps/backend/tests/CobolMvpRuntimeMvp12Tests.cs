@@ -8,14 +8,17 @@ namespace CobolToCsharpMigration.Tests;
 
 public class CobolMvpRuntimeMvp12Tests
 {
-    [Fact]
-    public void Run_Mvp12Sample_MatchesExpectedStdout()
+    [Theory]
+    [InlineData("input_empty.txt", "expected_empty.txt")]
+    [InlineData("input_1line.txt", "expected_1line.txt")]
+    [InlineData("input.txt", "expected.txt")]
+    public void Run_Mvp12Sample_MatchesExpectedStdout(string inputFile, string expectedFile)
     {
         string backendRoot = GetBackendRoot();
         string repoRoot = Path.GetFullPath(Path.Combine(backendRoot, "..", ".."));
 
-        string sampleInputPath = Path.Combine(repoRoot, "samples", "data", "mvp12", "input.txt");
-        string expectedPath = Path.Combine(repoRoot, "samples", "data", "mvp12", "expected.txt");
+        string sampleInputPath = Path.Combine(repoRoot, "samples", "data", "mvp12", inputFile);
+        string expectedPath = Path.Combine(repoRoot, "samples", "data", "mvp12", expectedFile);
 
         string tempDir = Path.Combine(Path.GetTempPath(), "mvp12_test_" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(tempDir);
@@ -43,6 +46,41 @@ public class CobolMvpRuntimeMvp12Tests
                 Directory.Delete(tempDir, true);
             }
         }
+    }
+
+    [Fact]
+    public void SequentialFileReader_CurrentRecord_AfterReadNext_ReturnsCorrectValue()
+    {
+        string backendRoot = GetBackendRoot();
+        string repoRoot = Path.GetFullPath(Path.Combine(backendRoot, "..", ".."));
+        string inputPath = Path.Combine(repoRoot, "samples", "data", "mvp12", "input.txt");
+
+        using var reader = new SequentialFileReader(inputPath);
+        Assert.Equal(string.Empty, reader.CurrentRecord);
+
+        Assert.True(reader.ReadNext());
+        Assert.Equal("AAA", reader.CurrentRecord);
+
+        Assert.True(reader.ReadNext());
+        Assert.Equal("BBBB", reader.CurrentRecord);
+
+        Assert.True(reader.ReadNext());
+        Assert.Equal("CC", reader.CurrentRecord);
+
+        Assert.False(reader.ReadNext());
+        Assert.Equal(string.Empty, reader.CurrentRecord);
+    }
+
+    [Fact]
+    public void SequentialFileReader_ReadInto_ThrowsNotSupportedException()
+    {
+        string backendRoot = GetBackendRoot();
+        string repoRoot = Path.GetFullPath(Path.Combine(backendRoot, "..", ".."));
+        string inputPath = Path.Combine(repoRoot, "samples", "data", "mvp12", "input.txt");
+
+        using var reader = new SequentialFileReader(inputPath);
+        var ex = Assert.Throws<NotSupportedException>(() => reader.ReadInto());
+        Assert.Contains("READ INTO", ex.Message);
     }
 
     private static string NormalizeNewLine(string value)

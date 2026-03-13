@@ -1,11 +1,11 @@
 using System;
 using System.IO;
-using System.Text;
 
 namespace CobolMvpRuntime
 {
     // MVP12 target: verify sequential file input core
-    // READ ... AT END with EOF control
+    // READ ... AT END / NOT AT END with EOF control
+    // Conversion: if (!reader.ReadNext()) { /* AT END */ } else { /* NOT AT END */ }
     internal static class Mvp12Program
     {
         internal static void Run(TextWriter writer)
@@ -16,22 +16,20 @@ namespace CobolMvpRuntime
                 : envPath;
 
             int lineNo = 0;
-            bool eof = false;
 
-            using (var reader = new StreamReader(inputPath, Encoding.ASCII))
+            using (var reader = new SequentialFileReader(inputPath))
             {
-                while (!eof)
+                while (true)
                 {
-                    string record = reader.ReadLine();
-                    if (record == null)
+                    if (!reader.ReadNext())
                     {
-                        eof = true;
+                        // AT END
+                        break;
                     }
-                    else
-                    {
-                        lineNo += 1;
-                        writer.WriteLine("LINE=" + lineNo.ToString("D4") + "|TEXT=" + record);
-                    }
+
+                    // NOT AT END
+                    lineNo += 1;
+                    writer.WriteLine("LINE=" + lineNo.ToString("D4") + "|TEXT=" + reader.CurrentRecord);
                 }
             }
 
