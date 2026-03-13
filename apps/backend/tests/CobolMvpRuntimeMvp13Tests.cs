@@ -47,8 +47,10 @@ public class CobolMvpRuntimeMvp13Tests
     }
 
     [Theory]
+    [InlineData("input_empty.txt", "expected_empty.txt")]
     [InlineData("input_1line.txt", "expected_1line.txt")]
     [InlineData("input_multiline.txt", "expected_multiline.txt")]
+    [InlineData("input_withspaces.txt", "expected_withspaces.txt")]
     public void ProcessFile_ReadWriteCopy_MatchesExpectedOutput(string inputFile, string expectedFile)
     {
         string backendRoot = GetBackendRoot();
